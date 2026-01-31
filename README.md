@@ -26,6 +26,10 @@ But here's the thing — shells are weird. They do strange things with quotes, b
 
 No npm. No pip. No docker. Just open `index.html` in your browser. That's it.
 
+<img width="1624" height="991" alt="image" src="https://github.com/user-attachments/assets/51209f16-6195-4c26-b0c8-9417ac7d2d60" />
+
+This is also live at https://dr34mhacks.github.io/ExecEvasion/
+
 ## What It Does
 
 Enter a command. Get variations like:
@@ -142,10 +146,8 @@ Built by [Sid Joshi](https://github.com/dr34mhacks)
 
 If this helped you pop a shell or find a bug, consider starring the repo.
 
-## License
-
-Apache 2.0 — See [LICENSE](LICENSE) for details.
-
 ---
+
+<div align="center">
 
 *"The best filter bypass is the one the filter author didn't think of."*

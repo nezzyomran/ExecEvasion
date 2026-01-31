@@ -44,13 +44,11 @@ HTML_TEMPLATE = '''
 <head>
     <title>SecurePing v1.0 - Network Diagnostics</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Courier New', monospace;
-            background: #0a0a0a;
-            color: #00ff41;
-            min-height: 100vh;
-            padding: 2rem;
+            font-family: monospace;
+            background: #ffffff;
+            color: #000000;
+            padding: 1rem;
         }
         .container {
             max-width: 800px;
@@ -58,124 +56,107 @@ HTML_TEMPLATE = '''
         }
         h1 {
             text-align: center;
+            font-size: 1.5rem;
             margin-bottom: 0.5rem;
-            font-size: 2rem;
         }
         .subtitle {
             text-align: center;
-            color: #666;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
+            color: #666666;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
         }
         .warning {
-            background: rgba(255, 0, 0, 0.1);
+            background: #fff3f3;
             border: 1px solid #ff0000;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            border-radius: 8px;
-            color: #ff6666;
-            font-size: 0.85rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            color: #cc0000;
+            font-size: 0.8rem;
         }
         .card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+            border: 1px solid #dddddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
         label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #888;
+            margin-bottom: 0.25rem;
+            color: #333333;
         }
         input[type="text"] {
             width: 100%;
-            padding: 1rem;
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #00ff41;
+            padding: 0.5rem;
+            border: 1px solid #dddddd;
+            color: #000000;
             font-family: inherit;
             font-size: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         input:focus {
             outline: none;
-            border-color: #00ff41;
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+            border-color: #000000;
         }
         button {
             width: 100%;
-            padding: 1rem;
-            background: #00ff41;
-            border: none;
-            border-radius: 8px;
-            color: #000;
+            padding: 0.5rem;
+            background: #f0f0f0;
+            border: 1px solid #dddddd;
+            color: #000000;
             font-family: inherit;
             font-size: 1rem;
-            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
         }
         button:hover {
-            background: #33ff66;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+            background: #e0e0e0;
         }
         .output {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 1.5rem;
+            border: 1px solid #dddddd;
+            padding: 1rem;
             white-space: pre-wrap;
             font-size: 0.9rem;
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
         }
         .output.error {
             border-color: #ff0000;
-            color: #ff6666;
+            color: #cc0000;
         }
         .output.success {
-            border-color: #00ff41;
+            border-color: #000000;
         }
         .blocked-list {
-            background: #0a0a0a;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
         }
         .blocked-list h3 {
-            color: #ff6666;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            color: #cc0000;
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
         }
         .blocked-list code {
             display: inline-block;
-            background: #1a1a1a;
-            padding: 0.2rem 0.5rem;
-            margin: 0.2rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: #888;
+            background: #f0f0f0;
+            padding: 0.1rem 0.25rem;
+            margin: 0.1rem;
+            font-size: 0.7rem;
+            color: #666666;
         }
         .hint {
-            background: rgba(0, 100, 255, 0.1);
-            border: 1px solid #0066ff;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 2rem;
-            color: #66aaff;
-            font-size: 0.85rem;
+            background: #f0f8ff;
+            border: 1px solid #0000ff;
+            padding: 0.5rem;
+            margin-top: 1rem;
+            color: #0000cc;
+            font-size: 0.8rem;
         }
         .hint a {
-            color: #00ff41;
+            color: #000000;
         }
         .flag-box {
-            background: rgba(0, 255, 65, 0.1);
-            border: 1px solid #00ff41;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
+            background: #f0fff0;
+            border: 1px solid #008000;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
             text-align: center;
         }
     </style>
@@ -183,11 +164,10 @@ HTML_TEMPLATE = '''
 <body>
     <div class="container">
         <h1>SecurePing v1.0</h1>
-        <p class="subtitle">Enterprise Network Diagnostics Tool</p>
+        <p class="subtitle">Network Diagnostics Tool</p>
 
         <div class="warning">
-            <strong>Security Notice:</strong> This system has advanced command injection protection.
-            All dangerous commands are blocked by our WAF.
+            <strong>Security Notice:</strong> This system has command injection protection. Dangerous commands are blocked.
         </div>
 
         <div class="card">
@@ -198,7 +178,7 @@ HTML_TEMPLATE = '''
             </form>
 
             <div class="blocked-list">
-                <h3>Blocked Keywords (WAF Protection):</h3>
+                <h3>Blocked Keywords:</h3>
                 {% for pattern in blocked %}
                 <code>{{ pattern }}</code>
                 {% endfor %}
@@ -207,15 +187,15 @@ HTML_TEMPLATE = '''
 
         {% if output %}
         <div class="card">
-            <h3 style="margin-bottom: 1rem;">Output:</h3>
+            <h3 style="margin-bottom: 0.5rem;">Output:</h3>
             <div class="output {{ 'error' if error else 'success' }}">{{ output }}</div>
         </div>
         {% endif %}
 
         <div class="hint">
-            <strong>Challenge:</strong> Read the flag from <code>/tmp/flag.txt</code><br><br>
-            <strong>Hint:</strong> The filter is checking for exact substrings. Can you obfuscate your commands?<br>
-            Try using <a href="https://github.com/dr34mhacks/ExecEvasion" target="_blank">ExecEvasion</a> to generate bypass payloads!
+            <strong>Challenge:</strong> Read the flag from <code>/tmp/flag.txt</code><br>
+            <strong>Hint:</strong> The filter checks for exact substrings. Obfuscate your commands.<br>
+            Try using <a href="https://github.com/dr34mhacks/ExecEvasion" target="_blank">ExecEvasion</a> for payloads.
         </div>
 
         {% if flag_found %}
@@ -300,7 +280,6 @@ def setup_flag():
             f.write(flag_content)
         print(f"[+] Flag created at {flag_path}")
     except Exception as e:
-
         print(f"[-] Could not create flag: {e}")
         print("[*] You may need to manually create /tmp/flag.txt")
 

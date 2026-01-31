@@ -43,16 +43,22 @@ HTML_TEMPLATE = '''
 <html>
 <head>
     <title>SecurePing v1.0 - Network Diagnostics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: monospace;
             background: #ffffff;
             color: #000000;
             padding: 1rem;
+            margin: 0;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
+            width: 100%;
         }
         h1 {
             text-align: center;
@@ -72,6 +78,7 @@ HTML_TEMPLATE = '''
             margin-bottom: 1rem;
             color: #cc0000;
             font-size: 0.8rem;
+            word-wrap: break-word;
         }
         .card {
             border: 1px solid #dddddd;
@@ -85,12 +92,14 @@ HTML_TEMPLATE = '''
         }
         input[type="text"] {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             border: 1px solid #dddddd;
             color: #000000;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 16px;
             margin-bottom: 0.5rem;
+            border-radius: 0;
+            -webkit-appearance: none;
         }
         input:focus {
             outline: none;
@@ -98,24 +107,30 @@ HTML_TEMPLATE = '''
         }
         button {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.75rem;
             background: #f0f0f0;
             border: 1px solid #dddddd;
             color: #000000;
             font-family: inherit;
             font-size: 1rem;
             cursor: pointer;
+            -webkit-appearance: none;
+            border-radius: 0;
         }
-        button:hover {
+        button:hover, button:active {
             background: #e0e0e0;
         }
         .output {
             border: 1px solid #dddddd;
-            padding: 1rem;
+            padding: 0.75rem;
             white-space: pre-wrap;
-            font-size: 0.9rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 0.85rem;
             max-height: 300px;
             overflow-y: auto;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .output.error {
             border-color: #ff0000;
@@ -136,9 +151,9 @@ HTML_TEMPLATE = '''
         .blocked-list code {
             display: inline-block;
             background: #f0f0f0;
-            padding: 0.1rem 0.25rem;
-            margin: 0.1rem;
-            font-size: 0.7rem;
+            padding: 0.15rem 0.35rem;
+            margin: 0.15rem;
+            font-size: 0.75rem;
             color: #666666;
         }
         .hint {
@@ -148,16 +163,70 @@ HTML_TEMPLATE = '''
             margin-top: 1rem;
             color: #0000cc;
             font-size: 0.8rem;
+            word-wrap: break-word;
         }
         .hint a {
             color: #000000;
+            word-break: break-all;
+        }
+        .hint code {
+            background: #e0e8f0;
+            padding: 0.1rem 0.25rem;
+            word-break: break-all;
         }
         .flag-box {
             background: #f0fff0;
             border: 1px solid #008000;
-            padding: 0.5rem;
+            padding: 0.75rem;
             margin-top: 0.5rem;
             text-align: center;
+        }
+
+        /* Mobile responsive styles */
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 0.5rem;
+            }
+            h1 {
+                font-size: 1.25rem;
+            }
+            .card {
+                padding: 0.75rem;
+            }
+            input[type="text"] {
+                padding: 0.85rem;
+                font-size: 16px;
+            }
+            button {
+                padding: 0.85rem;
+                font-size: 1rem;
+            }
+            .blocked-list code {
+                font-size: 0.65rem;
+                padding: 0.1rem 0.25rem;
+                margin: 0.1rem;
+            }
+            .output {
+                font-size: 0.75rem;
+                padding: 0.5rem;
+                max-height: 250px;
+            }
+            .warning, .hint {
+                font-size: 0.75rem;
+                padding: 0.5rem;
+            }
+        }
+
+        @media screen and (max-width: 380px) {
+            h1 {
+                font-size: 1.1rem;
+            }
+            .subtitle {
+                font-size: 0.7rem;
+            }
+            .blocked-list code {
+                font-size: 0.6rem;
+            }
         }
     </style>
 </head>

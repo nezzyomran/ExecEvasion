@@ -5,7 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation | ExecEvasion - Command Obfuscation Reference</title>
     <meta name="description" content="Complete technical documentation for ExecEvasion command obfuscation techniques. Learn how and why each bypass method works for CTF and security testing.">
-    <meta name="keywords" content="command obfuscation, bypass techniques, CTF, penetration testing, security, WAF bypass, shell escaping">
+    <meta name="keywords" content="command obfuscation, bypass techniques, CTF, penetration testing, security, WAF bypass, shell escaping, red team">
+    <meta name="author" content="Sid Joshi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dr34mhacks.github.io/ExecEvasion/docs.html">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0a0a' width='100' height='100' rx='15'/><text x='50' y='68' font-family='monospace' font-size='50' fill='%2300ff41' text-anchor='middle'>>_</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0a0a' width='100' height='100' rx='15'/><text x='50' y='68' font-family='monospace' font-size='50' fill='%2300ff41' text-anchor='middle'>>_</text></svg>">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://dr34mhacks.github.io/ExecEvasion/docs.html">
+    <meta property="og:title" content="ExecEvasion Documentation | Command Obfuscation Reference">
+    <meta property="og:description" content="Learn why command obfuscation techniques work. Complete reference for glob patterns, quote insertion, encoding, and 15+ other bypass methods.">
+    <meta property="og:image" content="https://dr34mhacks.github.io/ExecEvasion/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="ExecEvasion">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://dr34mhacks.github.io/ExecEvasion/docs.html">
+    <meta name="twitter:title" content="ExecEvasion Documentation | Command Obfuscation Reference">
+    <meta name="twitter:description" content="Learn why command obfuscation techniques work. Complete reference for glob patterns, quote insertion, encoding, and 15+ other bypass methods.">
+    <meta name="twitter:image" content="https://dr34mhacks.github.io/ExecEvasion/og-image.png">
+    <meta name="twitter:creator" content="@dr34mhacks">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#00ff41">
+    <meta name="msapplication-TileColor" content="#0a0a0a">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "ExecEvasion Documentation - Command Obfuscation Techniques",
+        "description": "Complete technical documentation for command obfuscation techniques. Learn how and why each bypass method works for CTF and security testing.",
+        "url": "https://dr34mhacks.github.io/ExecEvasion/docs.html",
+        "author": {
+            "@type": "Person",
+            "name": "Sid Joshi",
+            "url": "https://github.com/dr34mhacks"
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": "Sid Joshi"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://dr34mhacks.github.io/ExecEvasion/docs.html"
+        },
+        "keywords": "command obfuscation, WAF bypass, CTF, penetration testing, security documentation, shell techniques"
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -697,6 +752,293 @@
         .glow-text {
             text-shadow: 0 0 10px var(--cyber-green-glow), 0 0 20px var(--cyber-green-glow);
         }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-btn {
+            display: none;
+            background: var(--cyber-green-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 0.8rem;
+            color: var(--cyber-green);
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn:hover,
+        .mobile-menu-btn:active {
+            background: var(--cyber-green);
+            color: var(--bg-primary);
+            box-shadow: 0 0 15px var(--cyber-green-glow);
+        }
+
+        .mobile-menu-btn .menu-icon {
+            line-height: 1;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 4rem;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: calc(100vh - 4rem);
+                z-index: 99;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(10px);
+                border-right: none;
+                border-top: 1px solid var(--border-color);
+                padding: 1.5rem;
+                overflow-y: auto;
+            }
+
+            .sidebar.mobile-open {
+                display: block;
+                animation: slideDown 0.3s ease;
+            }
+
+            @keyframes slideDown {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .content {
+                padding: 1.5rem 1rem 3rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .sidebar-section {
+                margin-bottom: 1.5rem;
+            }
+
+            .sidebar-nav a {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-content {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .logo {
+                flex: 1;
+                font-size: 1.25rem;
+            }
+
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                gap: 0.4rem;
+                flex-wrap: wrap;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .github-star {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.75rem;
+                margin-left: 0.5rem;
+            }
+
+            .github-star svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .doc-section h2 {
+                font-size: 1.25rem;
+                flex-wrap: wrap;
+            }
+
+            .section-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .technique-card {
+                margin-bottom: 1rem;
+            }
+
+            .technique-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+                padding: 1rem;
+            }
+
+            .technique-title {
+                font-size: 0.9rem;
+            }
+
+            .technique-title .icon {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+
+            .technique-body {
+                padding: 1rem;
+            }
+
+            .technique-body h4 {
+                font-size: 0.75rem;
+            }
+
+            .technique-body p {
+                font-size: 0.9rem;
+            }
+
+            .technique-body li {
+                font-size: 0.85rem;
+            }
+
+            .code-block {
+                padding: 1rem;
+                font-size: 0.75rem;
+                line-height: 1.8;
+            }
+
+            .inline-code {
+                font-size: 0.8em;
+            }
+
+            .comparison-table {
+                font-size: 0.8rem;
+                display: block;
+                overflow-x: auto;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+                white-space: nowrap;
+            }
+
+            .info-box {
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 1rem;
+            }
+
+            .info-box-icon {
+                font-size: 1.25rem;
+            }
+
+            .info-box-content h4 {
+                font-size: 0.8rem;
+            }
+
+            .info-box-content p {
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .logo-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .github-star {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.7rem;
+            }
+
+            .page-header {
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
+
+            .page-header p {
+                font-size: 0.9rem;
+            }
+
+            .doc-section {
+                margin-bottom: 2.5rem;
+            }
+
+            .doc-section h2 {
+                font-size: 1.1rem;
+            }
+
+            .technique-tags {
+                flex-wrap: wrap;
+            }
+
+            .tag {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .code-block {
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -708,6 +1050,9 @@
                 <div class="logo-icon">&gt;_</div>
                 <span><span style="color: var(--cyber-green);">Exec</span><span style="color: var(--text-primary);">Evasion</span></span>
             </a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+                <span class="menu-icon">&#9776;</span>
+            </button>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Generator</a>
                 <a href="docs.html" class="nav-link active">Documentation</a>
@@ -720,7 +1065,7 @@
     </nav>
 
     <div class="page-layout">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-section">
                 <div class="sidebar-title">Getting Started</div>
                 <ul class="sidebar-nav">
@@ -1779,6 +2124,42 @@ powershell -e dwBoAG8AYQBtAGkA</div>
         }, { rootMargin: '-20% 0px -70% 0px' });
 
         sections.forEach(section => observer.observe(section));
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn .menu-icon');
+            sidebar.classList.toggle('mobile-open');
+
+            // Toggle icon between hamburger and X
+            if (sidebar.classList.contains('mobile-open')) {
+                menuBtn.innerHTML = '&#10005;';
+            } else {
+                menuBtn.innerHTML = '&#9776;';
+            }
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                const sidebar = document.getElementById('sidebar');
+                const menuBtn = document.querySelector('.mobile-menu-btn .menu-icon');
+                sidebar.classList.remove('mobile-open');
+                menuBtn.innerHTML = '&#9776;';
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            if (sidebar && menuBtn && sidebar.classList.contains('mobile-open') &&
+                !sidebar.contains(e.target) &&
+                !menuBtn.contains(e.target)) {
+                sidebar.classList.remove('mobile-open');
+                document.querySelector('.mobile-menu-btn .menu-icon').innerHTML = '&#9776;';
+            }
+        });
     </script>
 </body>
 </html>

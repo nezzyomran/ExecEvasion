@@ -5,7 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExecEvasion | Command Obfuscation Toolkit for CTF & Pentesting</title>
     <meta name="description" content="Bypass WAFs, filters, and command restrictions with ExecEvasion - the ultimate command obfuscation toolkit for security researchers and CTF players.">
-    <meta name="keywords" content="command obfuscation, WAF bypass, CTF, penetration testing, shell bypass, filter evasion">
+    <meta name="keywords" content="command obfuscation, WAF bypass, CTF, penetration testing, shell bypass, filter evasion, security tools, red team">
+    <meta name="author" content="Sid Joshi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://dr34mhacks.github.io/ExecEvasion/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0a0a' width='100' height='100' rx='15'/><text x='50' y='68' font-family='monospace' font-size='50' fill='%2300ff41' text-anchor='middle'>>_</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0a0a' width='100' height='100' rx='15'/><text x='50' y='68' font-family='monospace' font-size='50' fill='%2300ff41' text-anchor='middle'>>_</text></svg>">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dr34mhacks.github.io/ExecEvasion/">
+    <meta property="og:title" content="ExecEvasion | Command Obfuscation Toolkit">
+    <meta property="og:description" content="Generate 50+ obfuscated command variants to bypass WAFs, filters, and input validation. Essential toolkit for pentesters, bug bounty hunters, and CTF players.">
+    <meta property="og:image" content="https://dr34mhacks.github.io/ExecEvasion/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="ExecEvasion">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://dr34mhacks.github.io/ExecEvasion/">
+    <meta name="twitter:title" content="ExecEvasion | Command Obfuscation Toolkit">
+    <meta name="twitter:description" content="Generate 50+ obfuscated command variants to bypass WAFs, filters, and input validation. Essential toolkit for pentesters and CTF players.">
+    <meta name="twitter:image" content="https://dr34mhacks.github.io/ExecEvasion/og-image.png">
+    <meta name="twitter:creator" content="@dr34mhacks">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#00ff41">
+    <meta name="msapplication-TileColor" content="#0a0a0a">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ExecEvasion",
+        "description": "Command obfuscation toolkit for bypassing WAFs, filters, and command restrictions. Generate 50+ obfuscated command variants for penetration testing and CTF challenges.",
+        "url": "https://dr34mhacks.github.io/ExecEvasion/",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Sid Joshi",
+            "url": "https://github.com/dr34mhacks"
+        },
+        "keywords": "command obfuscation, WAF bypass, CTF, penetration testing, security tools, filter evasion"
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -928,6 +982,221 @@
             from { opacity: 0; transform: translateX(-15px); }
             to { opacity: 1; transform: translateX(0); }
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.5rem 1rem;
+            }
+
+            .nav-content {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .logo {
+                flex: 1;
+                min-width: 150px;
+            }
+
+            .logo-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1.2rem;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: flex-end;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .github-star {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .github-star svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .container {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .hero {
+                padding: 2rem 0;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+
+            .stat-number {
+                font-size: 1.75rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+
+            .card-header {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .card-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+
+            .os-selector {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .os-btn {
+                padding: 1rem;
+            }
+
+            .technique-grid {
+                gap: 0.4rem;
+            }
+
+            .technique-pill {
+                padding: 0.4rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .generate-btn {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .example-chips {
+                gap: 0.4rem;
+            }
+
+            .example-chip {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+                padding: 0.75rem 1rem;
+            }
+
+            .result-code {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .copy-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 0.75rem;
+                display: inline-flex;
+            }
+
+            footer {
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 0.5rem 0.75rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                margin-top: 0.5rem;
+            }
+
+            .logo-text {
+                font-size: 1rem;
+            }
+
+            .logo-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero-badge {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.75rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .hero-stats {
+                gap: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            input[type="text"] {
+                padding: 0.85rem 1rem;
+                font-size: 16px;
+            }
+
+            .os-btn .os-icon {
+                font-size: 1.5rem;
+            }
+
+            .result-description {
+                padding: 0.75rem 1rem;
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1191,8 +1460,29 @@
             return div.innerHTML;
         }
 
-        function copyToClipboard(text, btn) {
-            navigator.clipboard.writeText(text).then(() => {
+        function copyToClipboard(index, btn) {
+            const payload = generatedResults[index]?.payload;
+            if (!payload) return;
+
+            navigator.clipboard.writeText(payload).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '&#10003; Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('copied');
+                }, 1500);
+            }).catch(err => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = payload;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
                 const original = btn.innerHTML;
                 btn.innerHTML = '&#10003; Copied!';
                 btn.classList.add('copied');
@@ -1385,7 +1675,7 @@
                         ${!r.avoidsBlocked ? '<span class="technique-tag warning">BLOCKED</span>' : ''}
                     </div>
                     <div class="result-code">
-                        <button class="copy-btn" onclick="copyToClipboard(\`${r.payload.replace(/`/g, '\\`').replace(/\\/g, '\\\\')}\`, this)">&#128203; Copy</button>
+                        <button class="copy-btn" onclick="copyToClipboard(${i}, this)">&#128203; Copy</button>
                         ${escapeHtml(r.payload)}
                     </div>
                     <div class="result-description"><span class="desc-icon">&#128161;</span> ${escapeHtml(r.description)}</div>

